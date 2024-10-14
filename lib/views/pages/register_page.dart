@@ -15,12 +15,22 @@ class _RegisterPageState extends State<RegisterPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _nameController = TextEditingController();
+  final _emailFocusNode = FocusNode();
+  final _nameFocusNode = FocusNode();
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    _nameController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 60),
+          padding: const EdgeInsets.only(right: 32, left: 32, top: 60),
           child: Form(
             key: _formKey,
             child: SingleChildScrollView(
@@ -36,6 +46,8 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                   const SizedBox(height: 100),
                   TextFormField(
+                    focusNode: _nameFocusNode,
+                    onEditingComplete: () => FocusScope.of(context).nextFocus(),
                     keyboardType: TextInputType.name,
                     controller: _nameController,
                     validator: (va) =>
@@ -52,6 +64,8 @@ class _RegisterPageState extends State<RegisterPage> {
                     height: 24,
                   ),
                   TextFormField(
+                    focusNode: _emailFocusNode,
+                    onEditingComplete: () => FocusScope.of(context).nextFocus(),
                     keyboardType: TextInputType.emailAddress,
                     controller: _emailController,
                     validator: (va) =>
@@ -99,9 +113,17 @@ class _RegisterPageState extends State<RegisterPage> {
                   const SizedBox(
                     height: 32,
                   ),
-                  MainButton(text: "Sign up", onPressed: () {}),
+                  MainButton(
+                      text: "Sign up",
+                      onPressed: () {
+                        if (_formKey.currentState!.validate()) {
+                          Navigator.of(context).pushNamed(
+                            RouteName.bottomNavBar,
+                          );
+                        }
+                      }),
                   SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.17,
+                    height: MediaQuery.of(context).size.height * 0.1,
                   ),
                   const Align(
                     alignment: Alignment.center,

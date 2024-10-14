@@ -14,6 +14,14 @@ class _LoginPageState extends State<LoginPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _emailFocusNode = FocusNode();
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +29,7 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 60),
+          padding: const EdgeInsets.only(right: 32, left: 32, top: 60),
           child: Form(
             key: _formKey,
             child: SingleChildScrollView(
@@ -37,6 +45,9 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   const SizedBox(height: 100),
                   TextFormField(
+                    focusNode: _emailFocusNode,
+                    onEditingComplete: () => FocusScope.of(context).nextFocus(),
+                    textInputAction: TextInputAction.next,
                     keyboardType: TextInputType.emailAddress,
                     controller: _emailController,
                     validator: (va) =>
@@ -79,7 +90,14 @@ class _LoginPageState extends State<LoginPage> {
                   const SizedBox(
                     height: 32,
                   ),
-                  MainButton(text: "LOGIN", onPressed: () {}),
+                  MainButton(
+                      text: "LOGIN",
+                      onPressed: () {
+                        if (_formKey.currentState!.validate()) {
+                          Navigator.of(context)
+                              .pushNamed(RouteName.bottomNavBar);
+                        }
+                      }),
                   SizedBox(
                     height: size.height * 0.02,
                   ),
