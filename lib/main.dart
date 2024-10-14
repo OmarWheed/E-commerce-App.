@@ -32,6 +32,12 @@ class MyApp extends StatelessWidget {
               .copyWith(color: Colors.grey),
           focusedBorder: borderTextFormField(),
           enabledBorder: borderTextFormField(),
+          focusedErrorBorder: borderTextFormField().copyWith(
+            borderSide: const BorderSide(color: Colors.red),
+          ),
+          errorBorder: borderTextFormField().copyWith(
+            borderSide: const BorderSide(color: Colors.red),
+          ),
         ),
       ),
     );
